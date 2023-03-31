@@ -1,0 +1,5 @@
+export const SET_ITEMS = 'SET_ITEMS'
+export const SET_PAGES_COUNT = 'SET_PAGES_COUNT'
+export const SET_OPTIONS = 'SET_OPTIONS'
+export const SET_SEARCH_QUERY = 'SET_SEARCH_QUERY'
+export const CLEAR_SEARCH = 'CLEAR_SEARCH'
