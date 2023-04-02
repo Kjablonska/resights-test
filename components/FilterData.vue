@@ -1,32 +1,42 @@
 <template>
-    <div>
-        <v-autocomplete @click="search" label="Autocomplete"
-            :items="['Male, Female, Agender, Genderqueer, Polygender, Bigender, Non-binary, Genderfluid']"></v-autocomplete>
+  <div>
+    <div v-for="filterName in filterValues">
+      <v-autocomplete :ref="filterName" multiple clearable @change="filter($event, filterName)" :label="filterName"
+        :items="findFilterValues(filterName)"></v-autocomplete>
     </div>
+    <div>
+      <button @click="clearFilters">Clear filters</button>
+    </div>
+  </div>
 </template>
-  
 <script>
-import { fetchData, clearSearch } from '../utils/dataLoader'
-import * as TYPES from '../store/mutationTypes'
+import { fetchData, getAllUniqueValues } from '../utils/dataLoader'
 
 export default {
-    data() {
-        return {
-            searchQuery: "",
-        }
+  name: 'FilterData',
+  props: ['filterValues'],
+  methods: {
+    findFilterValues(filterName) {
+      return getAllUniqueValues(filterName)
     },
-    methods: {
-        search(searchQuery) {
-            if (this.searchQuery !== "") {
-                this.$store.commit(TYPES.SET_SEARCH_QUERY, this.searchQuery)
-                fetchData(this.$store)
-            }
-        },
-        clearSearch() {
-            console.log("clearSearch")
-            clearSearch(this.$store)
-        }
+    filter(filter, filterName) {
+      if (filter.length === 0) {
+        this.$store.dispatch('clearFilter', filterName)
+      } else {
+        this.$store.dispatch('updateFilters', { filterName, filter })
+      }
+      fetchData(this.$store)
     },
+    clearFilters() {
+      this.$store.dispatch('clearAllFilters')
+      
+      // TODO - this looks hacky
+      this.filterValues.forEach((filter) => {
+        console.log(filter)
+        this.$refs[filter][0].reset()
+      })
+      fetchData(this.$store)
+    }
+  },
 }
 </script>
-  

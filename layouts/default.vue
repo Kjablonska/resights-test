@@ -10,6 +10,7 @@ v-app(dark)
 
 <script>
 export default {
+  name: 'default',
   data() {
     return {
       title: 'Resights'

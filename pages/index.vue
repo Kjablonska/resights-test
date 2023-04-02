@@ -1,6 +1,12 @@
 <template lang="pug">
 <div>
-  Search()
+  Search(
+    @updateItems="onUpdateItems"
+  )
+  FilterData(
+    :filterValues="filterValues"
+  )
+  //- Clear()
   v-container
     v-row
       v-col(cols)
@@ -23,18 +29,26 @@
 <script>
 import DataTable from '~/components/DataTable.vue'
 import Search from '~/components/Search.vue'
+import Clear from '~/components/Clear.vue'
+import FilterData from '~/components/FilterData.vue'
 import { mapActions, mapGetters } from 'vuex'
 import { fetchData } from '../utils/dataLoader'
 
 export default {
   components: {
     DataTable,
-    Search
+    Search,
+    Clear, 
+    FilterData
   },
   computed: {
     ...mapGetters({
       items: 'items',
     }),
+    // Filter values and headers should be aligned 
+    filterValues() {
+      return ['gender', 'year', 'sales', 'country', 'color']
+    },
     headers() {
       return [
         { text: 'Title', value: 'user.title', align: 'start' },
@@ -59,6 +73,11 @@ export default {
 
         fetchData(this.$store)
       }
+    },
+    onUpdateItems() {
+      console.log("onUpdateItems")
+      this.$store.dispatch('updateSearchQuery', 'Male')
+      fetchData(this.$store)
     }
   }
 }

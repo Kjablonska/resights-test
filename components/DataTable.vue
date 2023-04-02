@@ -7,14 +7,12 @@ v-data-table(
   item-key="email"
   dense
 ).elevation-1.mt-10
-  //- <template v-slot:item.color="{ item }">
-  //-   <v-chip :color="getColor(item.color)" dark>{{ item.color }}</v-chip>
-  //- </template>
 </template>
 <script>
 import { mapGetters } from 'vuex'
 
 export default {
+  name: 'DataTable',
   props: ['headers', 'items'],
   computed: {
     ...mapGetters({
@@ -30,12 +28,14 @@ export default {
       }
     }
   },
-  // methods: {
-  //   // Does not have all colors
-  //   getColor(color) {
-  //     return color.toLowerCase()
-  //   },
-  // },
+  watch: {
+    $props: {
+      handler() {
+      },
+      deep: true,
+      immediate: true,
+    },
+  }
 }
 </script>
 

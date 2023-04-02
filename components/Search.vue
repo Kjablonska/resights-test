@@ -1,19 +1,16 @@
 <template>
   <div>
-    <v-autocomplete clearable @change="search" v-model="searchQuery" label="Autocomplete"
-            :items="['Male', 'Female', 'Agender', 'Genderqueer', 'Polygender', 'Bigender', 'Non-binary', 'Genderfluid']"></v-autocomplete>
     <div>
-      <v-text-field clearable @click:clear="clearSearch" v-model="searchQuery"></v-text-field>
-    <button @click="search">Search</button>
-  </div>
+      <v-text-field clearable @click:clear="clearSearchQuery" v-model="searchQuery"></v-text-field>
+      <button @click="search">Search</button>
+    </div>
   </div>
 </template>
-
 <script>
-import { fetchData, clearSearch } from '../utils/dataLoader'
-import * as TYPES from '../store/mutationTypes'
+import { clearSearchQuery } from '../utils/dataLoader'
 
 export default {
+  name: 'Search',
   data() {
     return {
       searchQuery: "",
@@ -21,23 +18,14 @@ export default {
   },
   methods: {
     search() {
-      console.log("search")
       if (this.searchQuery !== "") {
-        this.$store.commit(TYPES.SET_SEARCH_QUERY, this.searchQuery)
-        fetchData(this.$store)
+        this.$store.dispatch('updateSearchQuery', this.searchQuery)
+        this.$emit('updateItems')
       }
     },
-    filter() {
-      console.log("search")
-      if (this.searchQuery !== "") {
-        this.$store.commit(TYPES.SET_FILTER, this.searchQuery)
-        fetchData(this.$store)
-      }
+    clearSearchQuery() {
+      clearSearchQuery(this.$store)
     },
-    clearSearch() {
-      console.log("clearSearch")
-      clearSearch(this.$store)
-    }
   },
 }
 </script>

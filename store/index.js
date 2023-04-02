@@ -7,11 +7,11 @@ const createStore = () => {
       pagesCount: 0,
       items: [],
       searchQuery: null,
-      search: {
-        searchString: null,
-        filter: null,
-      },
+      searchQuery: null,
+      filters: new Map(),
       // Default page settings
+
+      // TODO - is all of those needed?
       options: {
         page: 1,              // current page number
         itemsPerPage: 10,
@@ -41,6 +41,9 @@ const createStore = () => {
       },
       searchQuery(state) {
         return state.searchQuery
+      },
+      filters(state) {
+        return state.filters
       }
     },
     mutations: {
@@ -50,15 +53,25 @@ const createStore = () => {
       SET_PAGES_COUNT(state, pagesCount) {
         state.pagesCount = pagesCount
       },
+      SET_PAGE_NUMER(state, pageNumber) {
+        state.options.page = pageNumber
+      },
       SET_OPTIONS(state, options) {
         state.options = options
       },
       SET_SEARCH_QUERY(state, newQuery) {
+        console.log(newQuery)
         state.searchQuery = newQuery
       },
-      CLEAR_SEARCH(state) {
+      SET_FILTERS(state, filters) {
+        state.filters = filters
+      },
+      CLEAR_SEARCH_QUERY(state) {
         state.searchQuery = null
-      }
+      },
+      CLEAR_FILTERS(state) {
+        state.filters.clear()
+      },
     },
     actions: {
       updatePagesCount({ commit, state }, newPagesCount) {
@@ -76,6 +89,30 @@ const createStore = () => {
           return
         commit(TYPES.SET_ITEMS, newItems)
       },
+      updateSearchQuery({ commit, getters }, newSearchQuery) {
+        commit(TYPES.SET_PAGE_NUMER, 1)
+        if (getters.searchQuery === newSearchQuery)
+          return
+        commit(TYPES.SET_SEARCH_QUERY, newSearchQuery)
+      },
+      updateFilters({ commit, state }, { filterName, filter }) {
+        commit(TYPES.SET_PAGE_NUMER, 1)
+        const allFilters = state.filters
+        allFilters.set(filterName, filter)
+        commit(TYPES.SET_FILTERS, allFilters)
+      },
+      clearFilter({ commit, state }, filterName) {
+        const filters = state.filters
+        filters.delete(filterName)
+        commit(TYPES.SET_FILTERS, filters)
+      },
+      clearAllFilters({ commit }) {
+        commit(TYPES.CLEAR_FILTERS)
+      },
+      clearAll({ commit }) {
+        commit(TYPES.SET_SEARCH_QUERY)
+        commit(TYPES.CLEAR_FILTERS)
+      }
     }
   })
 }
