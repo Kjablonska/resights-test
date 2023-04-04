@@ -1,8 +1,6 @@
 <template>
-  <div class="filters">
-    <v-autocomplete :ref="filterName" multiple clearable v-model="filterValue" @change="filter($event, filterName)"
-      :label="filterName" :items="items"></v-autocomplete>
-  </div>
+  <v-autocomplete :ref="filterName" multiple clearable v-model="filterValue" @change="filter($event, filterName)"
+    :label="filterName" :items="items" />
 </template>
 <script>
 
@@ -26,8 +24,6 @@ export default {
 </script>
 <style lang="sass" scoped>
   .v-autocomplete
-    max-width: 40%
-    margin-left: 10px
-  .filters
-
+    text-transform: capitalize
+    max-width: 200px  
 </style>

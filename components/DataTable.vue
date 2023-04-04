@@ -8,12 +8,12 @@ v-data-table(
   :sort-desc.sync="sort.sortDesc"
   :page.sync="page"
   item-key="email"
+  :item-class="getColor"
   dense
 ).elevation-1.mt-10
 </template>
 <script>
 import { mapGetters } from 'vuex'
-import * as TYPES from '../store/mutationTypes'
 
 export default {
   name: 'DataTable',
@@ -22,7 +22,7 @@ export default {
     return {
       sort: {
         sortBy: this.$store.getters['sortBy'],
-        sortDesc: this.$store.getters['soerDesc']
+        sortDesc: this.$store.getters['sortDesc']
       },
       itemsPerPage: this.$store.getters['itemsPerPage'],
       page: this.$store.getters['page']
@@ -31,6 +31,7 @@ export default {
   computed: {
     ...mapGetters({
       pagesCount: 'pagesCount',
+      showColors: 'showColors',
     }),
   },
   methods: {
@@ -38,12 +39,14 @@ export default {
       const queryParams = this.$route.query
       if (!this.sort || !this.sort.sortBy || this.sort.sortBy.length === 0) {
         this.$router.push({ query: { ...queryParams, sortDesc: undefined, sortBy: undefined } })
-        this.$store.commit(TYPES.SET_SORT_BY, [])
-        this.$store.commit(TYPES.SET_SORT_DESC, false)
       } else {
         this.$router.push({ query: { ...queryParams, sortDesc: this.sort.sortDesc, sortBy: this.sort.sortBy } })
       }
-    }
+    },
+    getColor(item) {
+      if (this.showColors)
+        return item.color.toLowerCase() + "-background"
+    },
   },
   watch: {
     sort: {
@@ -68,7 +71,25 @@ export default {
 }
 </script>
 
-<style lang="sass" scoped>
+<style lang="sass">
+  $categories-colors-map: ("red": #FFCCCB, "pink": #f7c8f7, "blue": #9ec0f7, "yellow": #f7e4bc, "green": #c1f7bc, "purple": #c479fc, "violet": #c8a3f7, "khaki": #829481, "puce": #e6c4cc, "fuscia": #FDD5F9, "teal": #8EE2BF, "mauv": #C78DB6, "crimson": #fabbcd, "indigo": #C9C1EE, "aquamarine": #A8D3E6, "turquoise": #77FCFA, "orange": #fad5bb, "maroon": #E0B6BD, "goldenrod": #EDAF28)
+
+  @each $category, $color in $categories-colors-map 
+    .#{$category}-background
+      background-color: scale-color($color, $alpha: -70%)
+      transition: .25s
+
+    .#{$category}-background:hover
+      background-color: scale-color($color, $alpha: -50%) !important
+  
   .v-data-table
     max-width: 100%
+
+  .v-data-table th 
+    font-size: 14px !important
+    font-weight: bold
+  
+  .v-data-table::v-deep td
+    font-size: 12px !important
+  
 </style>

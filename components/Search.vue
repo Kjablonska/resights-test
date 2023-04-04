@@ -1,13 +1,15 @@
 <template>
-  <div>
-    <div class="search">
-      <v-text-field clearable @click:clear="clearSearchQuery" v-model="searchQuery"></v-text-field>
+  <v-layout row align-center justify-space-between>
+    <v-flex grow pa-5>
+      <v-text-field clearable @click:clear="clearSearchQuery" v-model="searchQuery" />
+    </v-flex>
+    <v-flex shrink pa-4>
       <v-btn @click="search">Search</v-btn>
-    </div>
-  </div>
+    </v-flex>
+  </v-layout>
 </template>
-<script>
 
+<script>
 export default {
   name: 'Search',
   data() {
@@ -29,17 +31,3 @@ export default {
   },
 }
 </script>
-
-<style lang="sass" scoped>
-  .v-text-field
-    max-width: 40%
-    margin-left: 10px
-
-  .search  
-    display: flex
-    align-items: center
-    width: 100%
-    
-  .v-btn
-    margin-left: 15px
-</style>

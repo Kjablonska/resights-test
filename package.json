@@ -17,6 +17,7 @@
   "devDependencies": {
     "@nuxtjs/vuetify": "^1.11.3",
     "fibers": "^5.0.0",
+    "jest": "^29.5.0",
     "pug": "^3.0.0",
     "pug-plain-loader": "^1.1.0",
     "sass": "^1.32.6",

@@ -1,4 +1,4 @@
-import sales from '../api/sales'
+import sales from './sales'
 
 const salesResults = sales.results
 let currentItems = salesResults
@@ -9,7 +9,6 @@ export function fetchData(store) {
   const itemsPerPage = store.getters['itemsPerPage']
   store.dispatch('updateItemsCount', dataSize)
 
-  // error?
   if (pageNumber < 0) {
     return
   }
@@ -21,7 +20,7 @@ export function fetchData(store) {
   let newItems = salesResults
 
   if (searchQuery && searchQuery !== '') {
-    newItems = searchBy(searchQuery, newItems)
+    newItems = searchBy(searchQuery, salesResults)
   }
   if (Object.keys(filters).length !== 0) {
     newItems = filterBy(filters, newItems)
@@ -32,13 +31,12 @@ export function fetchData(store) {
 
   store.dispatch('updateItemsCount', newItems.length)
   currentItems = newItems
-
-  newItems = sliceItems(pageNumber, itemsPerPage, newItems)
+  newItems = paginateData(pageNumber, itemsPerPage, newItems)
   store.dispatch('updateItems', newItems)
 }
 
 export function sortData(sortBy, sortDesc, items) {
-  const sortedItems = items.sort((a, b) => {
+  const sortedItems = [...items].sort((a, b) => {
     if (!sortDesc) {
       if (a[sortBy] < b[sortBy]) {
         return -1;
@@ -83,7 +81,7 @@ export function getAllUniqueValues(keyword) {
 }
 
 // Pagination
-function sliceItems(pageNumber, itemsPerPage, items) {
+function paginateData(pageNumber, itemsPerPage, items) {
   if (!items)
     return []
   const { start, end } = findStartAndEnd(pageNumber, itemsPerPage)
@@ -91,7 +89,7 @@ function sliceItems(pageNumber, itemsPerPage, items) {
 }
 
 function findStartAndEnd(pageNumber, itemsPerPage, itemsSize = dataSize) {
-  const start = (pageNumber - 1) * itemsPerPage // substracting 1 because page starts from 1 but items array starts from 0
+  const start = (pageNumber - 1) * itemsPerPage
   let end = start + itemsPerPage
   end = end > itemsSize ? itemsSize : end
 
@@ -99,7 +97,6 @@ function findStartAndEnd(pageNumber, itemsPerPage, itemsSize = dataSize) {
 }
 
 export function searchBy(searchPhrase, items) {
-  // Done to include lower and upper case 
   const searchQuery = searchPhrase.toLowerCase()
 
   const results = items.filter((item) => {

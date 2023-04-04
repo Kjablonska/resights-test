@@ -12,10 +12,14 @@ const createStore = () => {
       sortDesc: false,
       sortBy: [],
       itemsPerPage: 10,
+      showColors: false,
     },
     getters: {
       items(state) {
         return state.items
+      },
+      page(state) {
+        return state.page
       },
       itemsPerPage(state) {
         return state.itemsPerPage
@@ -37,6 +41,9 @@ const createStore = () => {
       },
       filters(state) {
         return state.filters
+      },
+      showColors(state) {
+        return state.showColors
       }
     },
     mutations: {
@@ -50,7 +57,7 @@ const createStore = () => {
         state.sortBy = sortBy
       },
       // Change to ITEMS_COUNT
-      SET_PAGES_COUNT(state, pagesCount) {
+      SET_ITEMS_COUNT(state, pagesCount) {
         state.pagesCount = pagesCount
       },
       SET_PAGE_NUMER(state, pageNumber) {
@@ -71,12 +78,15 @@ const createStore = () => {
       CLEAR_FILTERS(state) {
         state.filters.clear()
       },
+      SET_SHOW_COLORS(state, isShowColors) {
+        state.showColors = isShowColors
+      }
     },
     actions: {
       updateItemsCount({ commit, state }, newPagesCount) {
         if (newPagesCount < 0 || newPagesCount === state.pagesCount)
           return
-        commit(TYPES.SET_PAGES_COUNT, newPagesCount)
+        commit(TYPES.SET_ITEMS_COUNT, newPagesCount)
       },
       updateItems({ commit, state }, newItems) {
         if (!newItems || newItems === state.items)
