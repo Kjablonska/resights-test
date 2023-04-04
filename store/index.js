@@ -56,7 +56,6 @@ const createStore = () => {
       SET_SORT_BY(state, sortBy) {
         state.sortBy = sortBy
       },
-      // Change to ITEMS_COUNT
       SET_ITEMS_COUNT(state, pagesCount) {
         state.pagesCount = pagesCount
       },
@@ -89,37 +88,34 @@ const createStore = () => {
         commit(TYPES.SET_ITEMS_COUNT, newPagesCount)
       },
       updateItems({ commit, state }, newItems) {
-        if (!newItems || newItems === state.items)
-          return
-        commit(TYPES.SET_ITEMS, newItems)
-      },
-      clearSearchQuery({ commit }) {
-        commit(TYPES.CLEAR_SEARCH_QUERY)
+        if (newItems && newItems !== state.items)
+          commit(TYPES.SET_ITEMS, newItems)
       },
       updateSearchQuery({ commit, getters }, newSearchQuery) {
-        commit(TYPES.SET_PAGE_NUMER, 1)
-        if (getters.searchQuery === newSearchQuery)
-          return
-        commit(TYPES.SET_SEARCH_QUERY, newSearchQuery)
+        if (getters.searchQuery !== newSearchQuery)
+          commit(TYPES.SET_SEARCH_QUERY, newSearchQuery)
       },
-      updateFilters({ commit, state }, { filterName, filter }) {
-        commit(TYPES.SET_PAGE_NUMER, 1)
-        const allFilters = state.filters
-        allFilters[filterName] = filter
-        commit(TYPES.SET_FILTERS, allFilters)
-      },
-      clearFilter({ commit, state }, filterName) {
-        const filters = state.filters
-        delete filters[filterName]
+      updateFilters({ commit }, filters) {
         commit(TYPES.SET_FILTERS, filters)
-      },
-      clearAllFilters({ commit }) {
-        commit(TYPES.CLEAR_FILTERS)
       },
       clearAll({ commit }) {
         commit(TYPES.SET_SEARCH_QUERY)
         commit(TYPES.CLEAR_FILTERS)
-      }
+      },
+      updateSortData({ commit }, {sortBy, sortDesc}) {
+        commit(TYPES.SET_SORT_BY, sortBy)
+        commit(TYPES.SET_SORT_DESC, sortDesc)
+      },
+      updateItemsPerPage({ commit, getters }, itemsPerPage) {
+        if (getters.itemsPerPage !== itemsPerPage) {
+          commit(TYPES.SET_ITEMS_PER_PAGE, itemsPerPage)
+        }
+      },
+      updatePageNumber({ commit, getters }, pageNumber) {
+        if (getters.page !== pageNumber) {
+          commit(TYPES.SET_PAGE_NUMER, pageNumber)
+        }
+      },
     }
   })
 }

@@ -1,16 +1,15 @@
-import * as TYPES from '../store/mutationTypes'
-
 export default function ({ store, route }) {
+    console.log("here")
     const queryParams = route.query
     const queryParamsPage = parseInt(queryParams.page)
     const page = isNaN(queryParamsPage) ? store.getters['page'] : queryParamsPage
-    store.commit(TYPES.SET_PAGE_NUMER, page)
+    store.dispatch('updatePageNumber', page)
 
     const queryParamsItemsPerPage = parseInt(queryParams.itemsPerPage)
     const itemsPerPage = isNaN(queryParamsItemsPerPage) ? store.getters['itemsPerPage'] : queryParamsItemsPerPage
-    store.commit(TYPES.SET_ITEMS_PER_PAGE, itemsPerPage)
+    store.dispatch('updateItemsPerPage', itemsPerPage)
 
-    store.commit(TYPES.SET_SEARCH_QUERY, queryParams.search)
+    store.dispatch('updateSearchQuery', queryParams.search)
     setFilters(store, queryParams)
     setSortData(store, queryParams)
 }
@@ -28,7 +27,7 @@ function setFilters(store, queryParams) {
     if (queryParams.sales)
         filters['sales'] = parseFilterData(queryParams.sales)
 
-    store.commit(TYPES.SET_FILTERS, filters)
+    store.dispatch('updateFilters', filters)
 }
 
 function parseFilterData(queryParamFilter) {
@@ -50,6 +49,5 @@ function setSortData(store, queryParams) {
         sortDesc = queryParams.sortDesc === "true"
     }
 
-    store.commit(TYPES.SET_SORT_BY, sortBy)
-    store.commit(TYPES.SET_SORT_DESC, sortDesc)
+    store.dispatch('updateSortData', {sortBy, sortDesc})
 }

@@ -80,7 +80,6 @@ export function getAllUniqueValues(keyword) {
   return [...new Set(keywordValues)]
 }
 
-// Pagination
 function paginateData(pageNumber, itemsPerPage, items) {
   if (!items)
     return []
