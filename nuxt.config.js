@@ -29,6 +29,10 @@ export default {
   plugins: [
   ],
 
+  router: {
+    middleware: ['routeHandler']
+  },
+
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
 

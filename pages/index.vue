@@ -1,19 +1,19 @@
 <template lang="pug">
 <div>
-  Search(
-    @updateItems="onUpdateItems"
-  )
-  FilterData(
-    :filterValues="filterValues"
-  )
-  //- Clear()
+  Search()
+  <div v-for="filterName in filterValues">
+    FilterData(
+      :filterName="filterName"
+      :items="findFilterValues(filterName)"
+    )
+  </div>
+  Clear()
   v-container
     v-row
       v-col(cols)
         DataTable(
           :headers="headers"
           :items="items"
-          @optionsUpdate="updatePage"
         )
         //- v-progress-circular(
         //-   v-else
@@ -24,22 +24,23 @@
 </div>
 </template>
 
-<!-- v-if="items.length" -->
-
 <script>
 import DataTable from '~/components/DataTable.vue'
 import Search from '~/components/Search.vue'
 import Clear from '~/components/Clear.vue'
 import FilterData from '~/components/FilterData.vue'
-import { mapActions, mapGetters } from 'vuex'
-import { fetchData } from '../utils/dataLoader'
+import { mapGetters } from 'vuex'
+import { fetchData, getAllUniqueValues } from '../utils/dataLoader'
 
 export default {
   components: {
     DataTable,
     Search,
-    Clear, 
+    Clear,
     FilterData
+  },
+  middleware({ store }) {
+    fetchData(store)
   },
   computed: {
     ...mapGetters({
@@ -62,23 +63,10 @@ export default {
       ]
     },
   },
-  async asyncData({ store }) {
-    fetchData(store)
-  },
   methods: {
-    ...mapActions(['updatePage']),
-    updatePage(newOptions) {
-      if (newOptions) {
-        this.$store.dispatch('updatePageOptions', newOptions)
-
-        fetchData(this.$store)
-      }
+    findFilterValues(filterName) {
+      return getAllUniqueValues(filterName)
     },
-    onUpdateItems() {
-      console.log("onUpdateItems")
-      this.$store.dispatch('updateSearchQuery', 'Male')
-      fetchData(this.$store)
-    }
   }
 }
 </script>

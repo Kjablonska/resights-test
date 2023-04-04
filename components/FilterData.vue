@@ -1,42 +1,33 @@
 <template>
-  <div>
-    <div v-for="filterName in filterValues">
-      <v-autocomplete :ref="filterName" multiple clearable @change="filter($event, filterName)" :label="filterName"
-        :items="findFilterValues(filterName)"></v-autocomplete>
-    </div>
-    <div>
-      <button @click="clearFilters">Clear filters</button>
-    </div>
+  <div class="filters">
+    <v-autocomplete :ref="filterName" multiple clearable v-model="filterValue" @change="filter($event, filterName)"
+      :label="filterName" :items="items"></v-autocomplete>
   </div>
 </template>
 <script>
-import { fetchData, getAllUniqueValues } from '../utils/dataLoader'
 
 export default {
   name: 'FilterData',
-  props: ['filterValues'],
+  props: ['filterName', 'items'],
+  data() {
+    return { filterValue: this.$store.getters['filters'][this.filterName] }
+  },
   methods: {
-    findFilterValues(filterName) {
-      return getAllUniqueValues(filterName)
+    findCurrentValue(filterName) {
+      const currentFilter = this.$store.getters['filters']
+      return currentFilter[filterName]
     },
     filter(filter, filterName) {
-      if (filter.length === 0) {
-        this.$store.dispatch('clearFilter', filterName)
-      } else {
-        this.$store.dispatch('updateFilters', { filterName, filter })
-      }
-      fetchData(this.$store)
+      const queryParams = this.$route.query
+      this.$router.push({ query: { ...queryParams, [filterName]: filter.length > 0 ? filter : undefined } })
     },
-    clearFilters() {
-      this.$store.dispatch('clearAllFilters')
-      
-      // TODO - this looks hacky
-      this.filterValues.forEach((filter) => {
-        console.log(filter)
-        this.$refs[filter][0].reset()
-      })
-      fetchData(this.$store)
-    }
   },
 }
 </script>
+<style lang="sass" scoped>
+  .v-autocomplete
+    max-width: 40%
+    margin-left: 10px
+  .filters
+
+</style>

@@ -6,38 +6,31 @@ const createStore = () => {
     state: {
       pagesCount: 0,
       items: [],
-      searchQuery: null,
-      searchQuery: null,
-      filters: new Map(),
-      // Default page settings
-
-      // TODO - is all of those needed?
-      options: {
-        page: 1,              // current page number
-        itemsPerPage: 10,
-        sortBy: [],
-        sortDesc: [false],
-        groupBy: [],
-        groupDesc: [],
-        multiSort: false,
-        mustSort: false,
-      }
+      searchQuery: undefined,
+      filters: {},
+      page: 1,
+      sortDesc: false,
+      sortBy: [],
+      itemsPerPage: 10,
     },
     getters: {
       items(state) {
         return state.items
       },
       itemsPerPage(state) {
-        return state.options.itemsPerPage
+        return state.itemsPerPage
       },
       currentPageNumber(state) {
-        return state.options.page
+        return state.page
       },
       pagesCount(state) {
         return state.pagesCount
       },
-      options(state) {
-        return state.options
+      sortBy(state) {
+        return state.sortBy
+      },
+      sortDesc(state) {
+        return state.sortDesc
       },
       searchQuery(state) {
         return state.searchQuery
@@ -50,44 +43,48 @@ const createStore = () => {
       SET_ITEMS(state, items) {
         state.items = items
       },
+      SET_SORT_DESC(state, sortDesc) {
+        state.sortDesc = sortDesc
+      },
+      SET_SORT_BY(state, sortBy) {
+        state.sortBy = sortBy
+      },
+      // Change to ITEMS_COUNT
       SET_PAGES_COUNT(state, pagesCount) {
         state.pagesCount = pagesCount
       },
       SET_PAGE_NUMER(state, pageNumber) {
-        state.options.page = pageNumber
+        state.page = pageNumber
       },
-      SET_OPTIONS(state, options) {
-        state.options = options
+      SET_ITEMS_PER_PAGE(state, itemsPerPage) {
+        state.itemsPerPage = itemsPerPage
       },
       SET_SEARCH_QUERY(state, newQuery) {
-        console.log(newQuery)
         state.searchQuery = newQuery
       },
       SET_FILTERS(state, filters) {
         state.filters = filters
       },
       CLEAR_SEARCH_QUERY(state) {
-        state.searchQuery = null
+        state.searchQuery = undefined
       },
       CLEAR_FILTERS(state) {
         state.filters.clear()
       },
     },
     actions: {
-      updatePagesCount({ commit, state }, newPagesCount) {
+      updateItemsCount({ commit, state }, newPagesCount) {
         if (newPagesCount < 0 || newPagesCount === state.pagesCount)
           return
         commit(TYPES.SET_PAGES_COUNT, newPagesCount)
-      },
-      updatePageOptions({ commit, state }, newOptions) {
-        if (!newOptions || newOptions === state.options)
-          return
-        commit(TYPES.SET_OPTIONS, newOptions)
       },
       updateItems({ commit, state }, newItems) {
         if (!newItems || newItems === state.items)
           return
         commit(TYPES.SET_ITEMS, newItems)
+      },
+      clearSearchQuery({ commit }) {
+        commit(TYPES.CLEAR_SEARCH_QUERY)
       },
       updateSearchQuery({ commit, getters }, newSearchQuery) {
         commit(TYPES.SET_PAGE_NUMER, 1)
@@ -98,12 +95,12 @@ const createStore = () => {
       updateFilters({ commit, state }, { filterName, filter }) {
         commit(TYPES.SET_PAGE_NUMER, 1)
         const allFilters = state.filters
-        allFilters.set(filterName, filter)
+        allFilters[filterName] = filter
         commit(TYPES.SET_FILTERS, allFilters)
       },
       clearFilter({ commit, state }, filterName) {
         const filters = state.filters
-        filters.delete(filterName)
+        delete filters[filterName]
         commit(TYPES.SET_FILTERS, filters)
       },
       clearAllFilters({ commit }) {

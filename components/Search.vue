@@ -1,31 +1,45 @@
 <template>
   <div>
-    <div>
+    <div class="search">
       <v-text-field clearable @click:clear="clearSearchQuery" v-model="searchQuery"></v-text-field>
-      <button @click="search">Search</button>
+      <v-btn @click="search">Search</v-btn>
     </div>
   </div>
 </template>
 <script>
-import { clearSearchQuery } from '../utils/dataLoader'
 
 export default {
   name: 'Search',
   data() {
     return {
-      searchQuery: "",
+      searchQuery: this.$store.getters['searchQuery'],
     }
   },
   methods: {
     search() {
       if (this.searchQuery !== "") {
-        this.$store.dispatch('updateSearchQuery', this.searchQuery)
-        this.$emit('updateItems')
+        const queryParams = this.$route.query
+        this.$router.push({ query: { ...queryParams, search: this.searchQuery } })
       }
     },
     clearSearchQuery() {
-      clearSearchQuery(this.$store)
+      const queryParams = this.$route.query
+      this.$router.push({ query: { ...queryParams, search: undefined } })
     },
   },
 }
 </script>
+
+<style lang="sass" scoped>
+  .v-text-field
+    max-width: 40%
+    margin-left: 10px
+
+  .search  
+    display: flex
+    align-items: center
+    width: 100%
+    
+  .v-btn
+    margin-left: 15px
+</style>
