@@ -1,7 +1,6 @@
 import sales from './sales'
 
 const salesResults = sales.results
-let currentItems = salesResults
 const dataSize = salesResults.length
 
 export function fetchData(store) {
@@ -30,7 +29,6 @@ export function fetchData(store) {
   }
 
   store.dispatch('updateItemsCount', newItems.length)
-  currentItems = newItems
   newItems = paginateData(pageNumber, itemsPerPage, newItems)
   store.dispatch('updateItems', newItems)
 }
@@ -76,7 +74,7 @@ export function filterBy(filters, items) {
 }
 
 export function getAllUniqueValues(keyword) {
-  const keywordValues = currentItems.map((item) => item[keyword])
+  const keywordValues = salesResults.map((item) => item[keyword])
   return [...new Set(keywordValues)]
 }
 

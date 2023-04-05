@@ -1,5 +1,7 @@
 import Vuex from 'vuex'
 import * as TYPES from './mutationTypes'
+export const DEFAULT_PAGE = 1
+export const DEFAULT_ITEMS_PER_PAGE = 10
 
 const createStore = () => {
   return new Vuex.Store({
@@ -91,13 +93,6 @@ const createStore = () => {
         if (newItems && newItems !== state.items)
           commit(TYPES.SET_ITEMS, newItems)
       },
-      updateSearchQuery({ commit, getters }, newSearchQuery) {
-        if (getters.searchQuery !== newSearchQuery)
-          commit(TYPES.SET_SEARCH_QUERY, newSearchQuery)
-      },
-      updateFilters({ commit }, filters) {
-        commit(TYPES.SET_FILTERS, filters)
-      },
       clearAll({ commit }) {
         commit(TYPES.SET_SEARCH_QUERY)
         commit(TYPES.CLEAR_FILTERS)
@@ -106,16 +101,11 @@ const createStore = () => {
         commit(TYPES.SET_SORT_BY, sortBy)
         commit(TYPES.SET_SORT_DESC, sortDesc)
       },
-      updateItemsPerPage({ commit, getters }, itemsPerPage) {
-        if (getters.itemsPerPage !== itemsPerPage) {
-          commit(TYPES.SET_ITEMS_PER_PAGE, itemsPerPage)
+      setShowColors({commit, getters}, showColors) {
+        if (getters.showColors !== showColors) {
+          commit(TYPES.SET_SHOW_COLORS, showColors)
         }
-      },
-      updatePageNumber({ commit, getters }, pageNumber) {
-        if (getters.page !== pageNumber) {
-          commit(TYPES.SET_PAGE_NUMER, pageNumber)
-        }
-      },
+      }
     }
   })
 }

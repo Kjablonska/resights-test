@@ -25,7 +25,6 @@ export default {
         sortDesc: this.$store.getters['sortDesc']
       },
       itemsPerPage: this.$store.getters['itemsPerPage'],
-      page: this.$store.getters['page']
     }
   },
   computed: {
@@ -33,6 +32,16 @@ export default {
       pagesCount: 'pagesCount',
       showColors: 'showColors',
     }),
+    page: {
+      get() {
+        console.log(this.$store.getters['page']);
+        return this.$store.getters['page']
+      },
+      set(value) {
+        const queryParams = this.$route.query
+        this.$router.push({ query: { ...queryParams, page: value } })
+      }
+    }
   },
   methods: {
     sortItems() {
@@ -61,12 +70,6 @@ export default {
         this.$router.push({ query: { ...queryParams, itemsPerPage: this.itemsPerPage, page: 1 } })
       }
     },
-    page: {
-      handler() {
-        const queryParams = this.$route.query
-        this.$router.push({ query: { ...queryParams, page: this.page } })
-      }
-    }
   }
 }
 </script>

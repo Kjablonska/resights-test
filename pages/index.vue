@@ -9,7 +9,9 @@
           Clear()
         </v-layout>
           ColorCheckbox()
-          Search()
+          Search(
+            :searchKey="searchQuery"
+          )
         <v-layout row justify-space-around>
           <v-flex v-for="filterName in filterValues" :key="filterName" shrink>
             FilterData(
@@ -41,11 +43,11 @@
 </template>
 
 <script>
-import DataTable from '~/components/DataTable.vue'
-import Search from '~/components/Search.vue'
-import Clear from '~/components/Clear.vue'
-import ColorCheckbox from '~/components/ColorCheckbox.vue'
-import FilterData from '~/components/FilterData.vue'
+import DataTable from '@/components/DataTable.vue'
+import Search from '@/components/Search.vue'
+import Clear from '@/components/Clear.vue'
+import ColorCheckbox from '@/components/ColorCheckbox.vue'
+import FilterData from '@/components/FilterData.vue'
 import { mapGetters } from 'vuex'
 import { fetchData, getAllUniqueValues } from '../api/dataLoader'
 
@@ -63,6 +65,7 @@ export default {
   computed: {
     ...mapGetters({
       items: 'items',
+      searchQuery: 'searchQuery',
     }),
     // Filter values and headers should be aligned 
     filterValues() {

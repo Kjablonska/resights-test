@@ -1,13 +1,9 @@
 <template>
   <div>
-    <div>
-      <v-checkbox class="color-checkbox" v-model="showColor" label="Show colors"></v-checkbox>
-    </div>
+    <v-checkbox data-testid="color-checkbox" class="color-checkbox" v-model="showColor" label="Show colors"></v-checkbox>
   </div>
 </template>
 <script>
-import * as TYPES from '../store/mutationTypes'
-
 export default {
   computed: {
     showColor: {
@@ -15,7 +11,7 @@ export default {
         return this.$store.getters['showColor']
       },
       set(value) {
-        this.$store.commit(TYPES.SET_SHOW_COLORS, value)
+        this.$store.dispatch('setShowColors', value)
       }
     }
   }
