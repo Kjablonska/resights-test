@@ -70,6 +70,16 @@ First of all, the solution works under the assumption that provided data is corr
 Possible behaviour improvements
 Right now, the table does not display all data headers (for instance `ip_address` is omitted) but the search is performed by all data keys. This might be confusing to the user. Possible solution could be to add all missing headers or search only by the dispayed keys.
 
+## Examples
+Data table with fiters: 
+- gender: ['Female', 'Agender']
+- country: ['Poland']
+<img width="1705" alt="Screenshot 2023-04-05 at 12 13 47" src="https://user-images.githubusercontent.com/38289305/230052154-2300c62f-a85e-4cc3-b8c3-d3b5043363d7.png">
+
+Data table with:
+- Show colors set to true
+- sorting by "year" descending
+<img width="1705" alt="Screenshot 2023-04-05 at 12 15 37" src="https://user-images.githubusercontent.com/38289305/230052369-139a08ac-10ce-450c-9d0a-a92c7b1befb2.png">
 
 ## Instructions
 
