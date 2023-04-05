@@ -29,14 +29,12 @@ There are available filters:
 - Color
 
 By clicking on a filter, the user is presented with a dropdown menu with all available options.
-Filters are implemented as "OR" data - meaning that the user is always displayed all possible options for the whole dataset, not for the currently filtered/searched dataset.
+Filters are implemented as "OR" data - meaning that the user is always displayed all possible options for the whole dataset, not for the currently filtered/searched dataset. Filtering can be done by multiple values for all keys.
 Filters can be removed by clicking "X" button that appears once the filter is selected or clicking "Clear All" button.
 
 ## Search
 From the user perspective - data search is done by typing the search query in and clicking "Search" button.
-
-Search is performed by all data keys available in the dataset.
-
+Search is performed by all data keys available in the dataset. Search is always a one pharse, there is no option to search by multiple values.
 Search can be removed by clicking "X" button that appears once the user types search key or clicking "Clear All" button.
 
 ## Sort
